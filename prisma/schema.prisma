@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -128,9 +122,10 @@ model Profissional {
   id            String          @id @default(uuid())
   nome          String
   especialidade String
-  crm           String          @unique
-  createdAt     DateTime        @default(now())
-  updatedAt     DateTime        @updatedAt
+  NumClasse           String          @unique
+  createdAt     DateTime?       @default(now())
+  updatedAt     DateTime?      @updatedAt
+  tratamentos   Tratamento[] //Relacionamento com Tratamento 
   consultas     Consultas[] // Relacionamento com Consultas
   unidadeId     String?
   unidade       UnidadeDeSaude? @relation(fields: [unidadeId], references: [id])
@@ -139,7 +134,8 @@ model Profissional {
 model Tratamento {
   id           String   @id @default(uuid())
   nome         String
-  profissional String
+  profissionalId String
+  profissional Profissional @relation(fields: [profissionalId], references: [id])
   userId       String
   usuario      User     @relation(fields: [userId], references: [id])
   createdAt    DateTime @default(now())
@@ -150,7 +146,7 @@ model UnidadeDeSaude {
   id            String         @id @default(uuid())
   nome          String
   endereco      String
-  tipo          String
+  tipo          String?
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
   consultas     Consultas[] // Relacionamento com Consultas
