@@ -82,7 +82,6 @@ model Authenticator {
 model Consultas {
   id              String          @id @default(uuid())
   data            DateTime
-  endereco        String
   profissional    String          @map("profissionalId")
   queixas         String
   tratamento      String

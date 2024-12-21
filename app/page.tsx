@@ -1,7 +1,8 @@
-import { Search, SearchIcon } from "lucide-react";
+import { SearchIcon } from "lucide-react";
 import Header from "./_components/header"
 import { Button } from "./_components/ui/button";
 import { Input } from "./_components/ui/input";
+import Agendamento from "./_components/agendamentos";
 
 const Home = () => {
   return (
@@ -12,10 +13,11 @@ const Home = () => {
         <p>Sabado, 21 de Dezembro</p>
         <div className="flex items-center gap-5 p-5 mt-5">
           <Input placeholder="Pesquisar" />
-          <Button size={"icon"} variant={"primary"}>
+          <Button size="icon" variant="primary">
             <SearchIcon />
           </Button>
         </div>
+        <Agendamento />
       </div>
     </div>
   );
