@@ -4,6 +4,7 @@ import { Button } from "./_components/ui/button";
 import { Input } from "./_components/ui/input";
 import AgendamentoItem from "./_components/agendamentosItem";
 import { db } from "./_lib/prisma";
+import { Card, CardContent } from "./_components/ui/card";
 
 const Home = async () => {
   // Consulta os agendamentos com os relacionamentos necessários
@@ -24,6 +25,11 @@ const Home = async () => {
   const agendamentosFuturos = agendamentos.filter((agendamento) => {
     const dataAgendamento = new Date(agendamento.data);
     return dataAgendamento >= new Date(); // Verifica se é futuro
+  });
+
+  const agendamentosPassados = agendamentos.filter((agendamento) => {
+    const dataAgendamento = new Date(agendamento.data);
+    return dataAgendamento < new Date(); // Verifica se é passado
   });
   
   // Formata a data atual
@@ -50,7 +56,7 @@ const Home = async () => {
             <SearchIcon />
           </Button>
         </div>
-        <div>
+        <div className="mt-5">
           <h2 className="text-xs font-bold uppercase text-gray-400">Próximos Agendamentos</h2>
           <div className="flex gap-4 overflow-auto [&::-webkit-scrollbar]:hidden">
             {agendamentosFuturos.map((agendamento) => (
@@ -58,7 +64,20 @@ const Home = async () => {
             ))}
           </div>
         </div>
+        <div className="mt-5">
+          <h2 className="text-xs font-bold uppercase text-gray-400">Ultimas Cunsultas</h2>
+          <div className="flex gap-4 overflow-auto [&::-webkit-scrollbar]:hidden">
+            {agendamentosPassados.map((agendamento) => (
+            <AgendamentoItem key={agendamento.id} consultas={agendamento} />
+            ))}
+          </div>
+        </div>
       </div>
+      <footer>
+      <Card>
+        <CardContent className="py-5 px-5"> <p className="text-center text-sm">© 2023 Healt Pep</p></CardContent> 
+      </Card>
+      </footer>
     </div>
   );
 };
