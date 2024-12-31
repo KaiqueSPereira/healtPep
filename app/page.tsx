@@ -1,26 +1,66 @@
 import { SearchIcon } from "lucide-react";
-import Header from "./_components/header"
+import Header from "./_components/header";
 import { Button } from "./_components/ui/button";
 import { Input } from "./_components/ui/input";
-import Agendamento from "./_components/agendamentos";
+import AgendamentoItem from "./_components/agendamentosItem";
+import { db } from "./_lib/prisma";
 
-const Home = () => {
+const Home = async () => {
+  // Consulta os agendamentos com os relacionamentos necessários
+  const agendamentos = await db.Consultas.findMany({
+    include: {
+      profissional: {
+        select: {
+          nome: true,
+        },
+      },
+      unidade: {
+        select: {
+          nome: true,
+        },
+      },
+    },
+  });
+  const agendamentosFuturos = agendamentos.filter((agendamento) => {
+    const dataAgendamento = new Date(agendamento.data);
+    return dataAgendamento >= new Date(); // Verifica se é futuro
+  });
+  
+  // Formata a data atual
+  const currentDate = new Date().toLocaleDateString("pt-BR", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+  });
+
+  // Capitaliza o primeiro caractere da data formatada
+  const formattedDate =
+    currentDate.charAt(0).toUpperCase() + currentDate.slice(1);
+
   return (
-    <div> 
-      <Header/>
+    <div>
+      <Header />
       <div className="p-5">
+        {/* Nome do usuário dinâmico pode ser passado aqui */}
         <h2 className="text-2xl font-bold">Olá, Kaique</h2>
-        <p>Sabado, 21 de Dezembro</p>
+        <p>{formattedDate}</p>
         <div className="flex items-center gap-5 p-5 mt-5">
           <Input placeholder="Pesquisar" />
           <Button size="icon" variant="primary">
             <SearchIcon />
           </Button>
         </div>
-        <Agendamento />
+        <div>
+          <h2 className="text-xs font-bold uppercase text-gray-400">Próximos Agendamentos</h2>
+          <div className="flex gap-4 overflow-auto [&::-webkit-scrollbar]:hidden">
+            {agendamentosFuturos.map((agendamento) => (
+            <AgendamentoItem key={agendamento.id} consultas={agendamento} />
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );
-}
+};
 
-export default Home
+export default Home;

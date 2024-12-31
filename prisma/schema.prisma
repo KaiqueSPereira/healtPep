@@ -6,18 +6,19 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
 model User {
   id            String          @id @default(cuid())
   name          String?
   email         String          @unique
   emailVerified DateTime?
   image         String?
-  CNS           Int             @unique
+  CNS           BigInt             @unique
   accounts      Account[]
   sessions      Session[]
-  consultas     Consultas[] // Relacionamento com Consultas
-  endereco      Endereco[] // Relacionamento com Endereco
-  tratamentos   Tratamento[] //Relacionamento com Tratamento 
+  consultas     Consultas[]
+  endereco      Endereco[]
+  tratamentos   Tratamento[]
   Authenticator Authenticator[]
 
   createdAt DateTime @default(now())
@@ -63,7 +64,6 @@ model VerificationToken {
   @@id([identifier, token])
 }
 
-// Optional for WebAuthn support
 model Authenticator {
   credentialID         String  @unique
   userId               String
@@ -82,7 +82,6 @@ model Authenticator {
 model Consultas {
   id              String          @id @default(uuid())
   data            DateTime
-  profissional    String          @map("profissionalId")
   queixas         String
   tratamento      String
   tipodeexame     String
@@ -90,10 +89,12 @@ model Consultas {
   createdAt       DateTime        @default(now())
   updatedAt       DateTime        @updatedAt
   userId          String
-  usuario         User            @relation(fields: [userId], references: [id]) // Atualiza�?o aqui
-  profissionalRef Profissional    @relation(fields: [profissional], references: [id])
+  profissionalId  String
   unidadeId       String?
-  unidade         UnidadeDeSaude? @relation(fields: [unidadeId], references: [id])
+
+  usuario         User            @relation(fields: [userId], references: [id])
+  profissional    Profissional    @relation(fields: [profissionalId], references: [id])
+  unidade         UnidadeDeSaude? @relation(fields: [unidadeId], references: [id], onDelete: SetNull)
 }
 
 enum Consultatype {
@@ -111,8 +112,12 @@ model Endereco {
   municipio String
   UF        String
   nome      String
-  userId    String
-  usuario   User     @relation(fields: [userId], references: [id])
+  userId    String?
+  unidadeId String?
+
+  usuario   User?            @relation(fields: [userId], references: [id])
+  unidade   UnidadeDeSaude?  @relation(fields: [unidadeId], references: [id], onDelete: SetNull)
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -121,33 +126,39 @@ model Profissional {
   id            String          @id @default(uuid())
   nome          String
   especialidade String
-  NumClasse           String          @unique
-  createdAt     DateTime?       @default(now())
-  updatedAt     DateTime?      @updatedAt
-  tratamentos   Tratamento[] //Relacionamento com Tratamento 
-  consultas     Consultas[] // Relacionamento com Consultas
+  NumClasse     String          @unique
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  
+  tratamentos   Tratamento[]    @relation("ProfissionalTratamentos")
+  consultas     Consultas[]
   unidadeId     String?
-  unidade       UnidadeDeSaude? @relation(fields: [unidadeId], references: [id])
+  unidade       UnidadeDeSaude? @relation(fields: [unidadeId], references: [id], onDelete: SetNull)
 }
 
 model Tratamento {
-  id           String   @id @default(uuid())
-  nome         String
+  id            String         @id @default(uuid())
+  nome          String
   profissionalId String
-  profissional Profissional @relation(fields: [profissionalId], references: [id])
-  userId       String
-  usuario      User     @relation(fields: [userId], references: [id])
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  userId        String
+
+  profissional  Profissional   @relation(fields: [profissionalId], references: [id], name: "ProfissionalTratamentos")
+  usuario       User           @relation(fields: [userId], references: [id])
+
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
 }
 
 model UnidadeDeSaude {
-  id            String         @id @default(uuid())
+  id            String          @id @default(uuid())
   nome          String
-  endereco      String
   tipo          String?
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
-  consultas     Consultas[] // Relacionamento com Consultas
-  profissionais Profissional[] // Relacionamento com Profissionais
+  enderecoId    String?
+
+  endereco      Endereco[]
+  consultas     Consultas[]
+  profissionais Profissional[]
+
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
 }
