@@ -1,3 +1,5 @@
+import Link from "next/link";
+import { Button } from "./ui/button";
 import { Card, CardContent } from "./ui/card";
 
 const AgendamentoItem = ({ consultas }) => {
@@ -41,6 +43,11 @@ const AgendamentoItem = ({ consultas }) => {
             <h3 className="text-lg font-bold text-red-500">{tipo}</h3>
             <p className="truncate text-sm font-semibold text-gray-300">{profissionalNome}</p>
             <p className="truncate text-sm text-gray-400">{unidadeNome}</p>
+            <Button variant="secondary" className="mt-2 w-20">
+              <Link href='/consulta/${consulta.id}'>
+                Detalhes
+              </Link>
+            </Button>
           </div>
 
           {/* Informações de data e hora */}

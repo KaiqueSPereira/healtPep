@@ -6,6 +6,7 @@ import AgendamentoItem from "./_components/agendamentosItem";
 import { db } from "./_lib/prisma";
 import { Card, CardContent } from "./_components/ui/card";
 
+
 const Home = async () => {
   // Consulta os agendamentos com os relacionamentos necessários
   const agendamentos = await db.Consultas.findMany({
@@ -57,12 +58,13 @@ const Home = async () => {
           </Button>
         </div>
         <div className="mt-5">
-          <h2 className="text-xs font-bold uppercase text-gray-400">Próximos Agendamentos</h2>
-          <div className="flex gap-4 overflow-auto [&::-webkit-scrollbar]:hidden">
-            {agendamentosFuturos.map((agendamento) => (
-            <AgendamentoItem key={agendamento.id} consultas={agendamento} />
-            ))}
-          </div>
+                <h2 className="text-xs font-bold uppercase text-gray-400">Agendamentos</h2>
+                <div className="flex gap-4 overflow-auto [&::-webkit-scrollbar]:hidden">
+                  {agendamentosFuturos.map((agendamento) => (
+                    <AgendamentoItem key={agendamento.id} consultas={agendamento} />
+                  ))}
+                </div>
+              
         </div>
         <div className="mt-5">
           <h2 className="text-xs font-bold uppercase text-gray-400">Ultimas Cunsultas</h2>
