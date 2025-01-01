@@ -1,4 +1,4 @@
-import { SearchIcon } from "lucide-react";
+﻿import { SearchIcon } from "lucide-react";
 import Header from "./_components/header";
 import { Button } from "./_components/ui/button";
 import { Input } from "./_components/ui/input";
@@ -8,8 +8,8 @@ import { Card, CardContent } from "./_components/ui/card";
 
 
 const Home = async () => {
-  // Consulta os agendamentos com os relacionamentos necessários
-  const agendamentos = await db.Consultas.findMany({
+  // Consulta os agendamentos com os relacionamentos necessĂˇrios
+  const agendamentos = await db.consultas.findMany({
     include: {
       profissional: {
         select: {
@@ -25,12 +25,12 @@ const Home = async () => {
   });
   const agendamentosFuturos = agendamentos.filter((agendamento) => {
     const dataAgendamento = new Date(agendamento.data);
-    return dataAgendamento >= new Date(); // Verifica se é futuro
+    return dataAgendamento >= new Date(); // Verifica se Ă© futuro
   });
 
   const agendamentosPassados = agendamentos.filter((agendamento) => {
     const dataAgendamento = new Date(agendamento.data);
-    return dataAgendamento < new Date(); // Verifica se é passado
+    return dataAgendamento < new Date(); // Verifica se Ă© passado
   });
   
   // Formata a data atual
@@ -48,8 +48,8 @@ const Home = async () => {
     <div>
       <Header />
       <div className="p-5">
-        {/* Nome do usuário dinâmico pode ser passado aqui */}
-        <h2 className="text-2xl font-bold">Olá, Kaique</h2>
+        {/* Nome do usuĂˇrio dinĂ˘mico pode ser passado aqui */}
+        <h2 className="text-2xl font-bold">OlĂˇ, Kaique</h2>
         <p>{formattedDate}</p>
         <div className="flex items-center gap-5 p-5 mt-5">
           <Input placeholder="Pesquisar" />
@@ -73,11 +73,12 @@ const Home = async () => {
             <AgendamentoItem key={agendamento.id} consultas={agendamento} />
             ))}
           </div>
+          
         </div>
       </div>
       <footer>
       <Card>
-        <CardContent className="py-5 px-5"> <p className="text-center text-sm">© 2023 Healt Pep</p></CardContent> 
+        <CardContent className="py-5 px-5"><p className="text-center text-sm">Â© 2023 Healt Pep</p></CardContent> 
       </Card>
       </footer>
     </div>
