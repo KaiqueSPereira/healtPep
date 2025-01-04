@@ -49,7 +49,7 @@ const Home = async () => {
       <Header />
       <div className="p-5">
         {/* Nome do usuĂˇrio dinĂ˘mico pode ser passado aqui */}
-        <h2 className="text-2xl font-bold">OlĂˇ, Kaique</h2>
+        <h2 className="text-2xl font-bold">Olá, Kaique</h2>
         <p>{formattedDate}</p>
         <div className="flex items-center gap-5 p-5 mt-5">
           <Input placeholder="Pesquisar" />
@@ -78,7 +78,7 @@ const Home = async () => {
       </div>
       <footer>
       <Card>
-        <CardContent className="py-5 px-5"><p className="text-center text-sm">Â© 2023 Healt Pep</p></CardContent> 
+        <CardContent className="py-5 px-5"><p className="text-center text-sm">© 2023 Healt Pep</p></CardContent> 
       </Card>
       </footer>
     </div>

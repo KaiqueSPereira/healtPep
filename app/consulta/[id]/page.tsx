@@ -12,9 +12,9 @@ interface ConsultaPageProps {
 }
 
 const ConsultaPage = async ({ params }: ConsultaPageProps) => {
-  // Verifica a ausência do ID
+  // Verifica a ausĂ„â€šÄąĹľncia do ID
   if (!params.id) {
-    return <h1>Consulta não encontrada</h1>;
+    return <h1>Consulta nĂŁo encontrada</h1>;
   }
 
   const consultas = await db.consultas.findUnique({
@@ -51,15 +51,22 @@ const ConsultaPage = async ({ params }: ConsultaPageProps) => {
       </header>
 
       <main className="pt-20 pl-5">
+        <div className="flex p-3 gap-5 items-center">
         <h1 className="text-2xl font-bold">{consultas.tipo}</h1>
-        <h2 className="text-xl font-bold">{consultas.profissional?.nome}</h2>
+        <p>{consultas.data.toLocaleDateString("pt-BR")}</p>
+        </div>
+        <div className="flex p-3 gap-3 items-center">
+          <h2 className="text-xl font-bold">{consultas.profissional?.nome}</h2>
+          <p>-</p>
+          <p>{consultas.profissional?.NumClasse || ""}</p>
+        </div>
 
         <Card>
           <CardHeader>
-            <CardTitle>Anotações Sobre a Consulta</CardTitle>
+            <CardTitle>Anotaçes sobre a consulta</CardTitle>
           </CardHeader>
           <CardContent>
-            <DescriptionEditor descricao={consultas.descricao || ""} consultaId={params.id} />
+            <DescriptionEditor descricao={consultas.queixas || ""} consultaId={params.id} />
           </CardContent>
         </Card>
       </main>
