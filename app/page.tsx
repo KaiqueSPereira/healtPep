@@ -1,12 +1,21 @@
-﻿import { SearchIcon } from "lucide-react";
+import { SearchIcon } from "lucide-react";
 import Header from "./_components/header";
 import { Button } from "./_components/ui/button";
 import { Input } from "./_components/ui/input";
 import AgendamentoItem from "./_components/agendamentosItem";
 import { db } from "./_lib/prisma";
 import { Card, CardContent } from "./_components/ui/card";
+import { Geist, Geist_Mono } from "next/font/google";
 
+const geistSans = Geist({
+  variable: "--font-geist-sans",
+  subsets: ["latin"],
+});
 
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
+  subsets: ["latin"],
+});
 const Home = async () => {
   // Consulta os agendamentos com os relacionamentos necessĂˇrios
   const agendamentos = await db.consultas.findMany({

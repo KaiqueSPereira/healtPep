@@ -1,6 +1,6 @@
 // /app/api/consultas/[consultaId]/route.ts
-import { NextResponse } from "next/server";
 import { db } from "@/app/_lib/prisma";
+import { NextResponse } from "next/server";
 
 // Atualizar a descrição da consulta
 export async function PATCH(req: Request, { params }: { params: { consultaId: string } }) {
@@ -12,16 +12,14 @@ export async function PATCH(req: Request, { params }: { params: { consultaId: st
             where: { id: consultaId },
             data: { queixas },
         });
-
         return NextResponse.json(updatedConsulta);
     } catch (error) {
-        console.error("Erro ao atualizar a descrição:", error);
         return NextResponse.json({ error: "Falha ao atualizar a descrição" }, { status: 500 });
     }
 }
 
-// Obter uma consulta pelo ID
-export async function GET(req: Request, { params }: { params: { consultaId: string } }) {
+// Obter uma consulta específica
+export async function getConsultaById(req: Request, { params }: { params: { consultaId: string } }) {
     try {
         const { consultaId } = params;
 
@@ -32,15 +30,13 @@ export async function GET(req: Request, { params }: { params: { consultaId: stri
         if (!consulta) {
             return NextResponse.json({ error: "Consulta não encontrada" }, { status: 404 });
         }
-
         return NextResponse.json(consulta);
-    } catch (error) {
-        console.error("Erro ao buscar a consulta:", error);
+    } catch {
         return NextResponse.json({ error: "Falha ao buscar a consulta" }, { status: 500 });
     }
 }
 
-// Deletar uma consulta pelo ID
+// Deletar uma consulta
 export async function DELETE(req: Request, { params }: { params: { consultaId: string } }) {
     try {
         const { consultaId } = params;
@@ -48,10 +44,8 @@ export async function DELETE(req: Request, { params }: { params: { consultaId: s
         await db.consultas.delete({
             where: { id: consultaId },
         });
-
         return NextResponse.json({ message: "Consulta deletada com sucesso!" });
-    } catch (error) {
-        console.error("Erro ao deletar a consulta:", error);
+    } catch {
         return NextResponse.json({ error: "Falha ao deletar a consulta" }, { status: 500 });
     }
 }
@@ -73,10 +67,18 @@ export async function POST(req: Request) {
                 unidadeId,
             },
         });
-
         return NextResponse.json(novaConsulta);
     } catch (error) {
-        console.error("Erro ao criar a consulta:", error);
         return NextResponse.json({ error: "Falha ao criar a consulta" }, { status: 500 });
+    }
+}
+
+// Listar todas as consultas
+export async function getAllConsultas() {
+    try {
+        const consultas = await db.consultas.findMany();
+        return NextResponse.json(consultas);
+    } catch {
+        return NextResponse.json({ error: "Falha ao buscar as consultas" }, { status: 500 });
     }
 }

@@ -4,6 +4,7 @@ import { ChevronLeftIcon, MenuIcon } from "lucide-react";
 import Link from "next/link";
 import DescriptionEditor from "../components/descriptioneditor";
 import { db } from "@/app/_lib/prisma";
+import { Sheet } from "@/app/_components/ui/sheet";
 
 interface ConsultaPageProps {
   params: {
@@ -12,7 +13,7 @@ interface ConsultaPageProps {
 }
 
 const ConsultaPage = async ({ params }: ConsultaPageProps) => {
-  // Verifica a ausĂ„â€šÄąĹľncia do ID
+  // Verifica a ausÄ‚â€žĂ˘â‚¬ĹˇĂ„Ä…ÄąÄľncia do ID
   if (!params.id) {
     return <h1>Consulta nĂŁo encontrada</h1>;
   }
@@ -48,6 +49,9 @@ const ConsultaPage = async ({ params }: ConsultaPageProps) => {
         <Button size="icon" variant="secondary" className="absolute top-5 right-5">
           <MenuIcon />
         </Button>
+        <Sheet>
+          
+        </Sheet>
       </header>
 
       <main className="pt-20 pl-5">
@@ -63,11 +67,12 @@ const ConsultaPage = async ({ params }: ConsultaPageProps) => {
 
         <Card>
           <CardHeader>
-            <CardTitle>Anotaçes sobre a consulta</CardTitle>
+            <CardTitle>Anotações sobre a consulta</CardTitle>
           </CardHeader>
-          <CardContent>
+            <CardContent>
+            <p>{consultas.queixas || "Nenhuma queixa registrada"}</p>
             <DescriptionEditor descricao={consultas.queixas || ""} consultaId={params.id} />
-          </CardContent>
+            </CardContent>
         </Card>
       </main>
     </div>

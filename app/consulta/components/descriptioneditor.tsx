@@ -29,7 +29,7 @@ const DescriptionEditor = ({ descricao, consultaId }: DescriptionEditorProps) =>
       } else {
         alert("Erro ao salvar a descrição. Tente novamente.");
       }
-    } catch (error) {
+    } catch {
       alert("Erro ao salvar a descrição. Tente novamente.");
     } finally {
       setLoading(false);
@@ -41,12 +41,12 @@ const DescriptionEditor = ({ descricao, consultaId }: DescriptionEditorProps) =>
       <Dialog>
         <DialogTrigger asChild>
           <Button variant="secondary" className="mt-3">
-            {descricao ? "Editar Descrição" : "Fazer anotações"}
+            {descricao ? "Editar Descrição" : "Fazer anotaçõe"}
           </Button>
         </DialogTrigger>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>{descricao ? "Editar Descrição" : "Fazer anotações"}</DialogTitle>
+            <DialogTitle>{descricao ? "Editar Descrição" : "Fazer anotaçõe"}</DialogTitle>
           </DialogHeader>
           <Textarea
             placeholder="Escreva aqui as informações sobre a consulta..."
@@ -58,7 +58,7 @@ const DescriptionEditor = ({ descricao, consultaId }: DescriptionEditorProps) =>
             <Button variant="secondary" onClick={() => setNovaDescricao(descricao)}>
               Cancelar
             </Button>
-            <Button variant="primary" onClick={handleSaveDescricao} disabled={loading}>
+            <Button variant="default" onClick={handleSaveDescricao} disabled={loading}>
               {loading ? "Salvando..." : "Salvar"}
             </Button>
           </div>
